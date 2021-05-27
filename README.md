@@ -50,14 +50,12 @@ To look at these results through various angle and zoom, open up .fig files in '
 Download the gifs to look at the animations
 
 **Couette Flow**
-<p align="center">
-  <img src="https://raw.githubusercontent.com/Stav42/SRGE_acc/main/lammps/flow/couette.gif">
-</p>
+
+![alt text](https://raw.githubusercontent.com/Stav42/SRGE_acc/main/lammps/flow/couette.gif "Couette Flow")
 
 **Poisson Flow**
-<p align="center">
-  <img src="https://raw.githubusercontent.com/Stav42/SRGE_acc/main/lammps/flow/pois.gif">
-</p>
+
+![alt text](https://raw.githubusercontent.com/Stav42/SRGE_acc/main/lammps/flow/pois.gif "Poisson Flow")
 
 
 
