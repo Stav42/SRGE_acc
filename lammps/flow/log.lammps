@@ -1,5 +1,5 @@
-LAMMPS (29 Oct 2020)
-OMP_NUM_THREADS environment is not set. Defaulting to 1 thread. (src/comm.cpp:94)
+LAMMPS (14 May 2021)
+OMP_NUM_THREADS environment is not set. Defaulting to 1 thread. (src/comm.cpp:98)
   using 1 OpenMP thread(s) per MPI task
 # 2-d LJ flow simulation
 
@@ -61,33 +61,33 @@ fix_modify   2 temp mobile
 
 # Couette flow
 
-#velocity     lower set 0.0 0.0 0.0
-#velocity     upper set 3.0 0.0 0.0
-#fix	     3 boundary setforce 0.0 0.0 0.0
-#fix	     4 all enforce2d
+velocity     lower set 0.0 0.0 0.0
+velocity     upper set 3.0 0.0 0.0
+fix	     3 boundary setforce 0.0 0.0 0.0
+fix	     4 all enforce2d
 
 # Poiseuille flow
 
-velocity     boundary set 0.0 0.0 0.0
-fix	     3 lower setforce 0.0 0.0 0.0
-fix	     4 upper setforce 0.0 NULL 0.0
-fix	     5 upper aveforce 0.0 -1.0 0.0
-fix	     6 flow addforce 0.5 0.0 0.0
-fix	     7 all enforce2d
+#velocity     boundary set 0.0 0.0 0.0
+#fix	     3 lower setforce 0.0 0.0 0.0
+#fix	     4 upper setforce 0.0 NULL 0.0
+#fix	     5 upper aveforce 0.0 -1.0 0.0
+#fix	     6 flow addforce 0.5 0.0 0.0
+#fix	     7 all enforce2d
 
 # Run
 
 timestep	0.003
 thermo		500
 thermo_modify	temp mobile
-WARNING: Temperature for thermo pressure is not for group all (src/thermo.cpp:472)
+WARNING: Temperature for thermo pressure is not for group all (src/thermo.cpp:483)
 
 #dump		1 all atom 500 dump.flow
 
-dump		2 all image 100 image.*.jpg type type 		zoom 1.6 adiam 1.5
+dump		2 all image 100 ./image.*.jpg type type 		zoom 1.6 adiam 1.2
 dump_modify	2 pad 5
 
-#dump		3 all movie 100 movie.mpg type type #		zoom 1.6 adiam 1.5
+#dump		3 all movie 100 movie.mpg type type #		zoom 1.6 adiam 1.2
 #dump_modify	3 pad 5
 
 run		10000
@@ -101,55 +101,55 @@ Neighbor list info ...
   (1) pair lj/cut, perpetual
       attributes: half, newton on
       pair build: half/bin/atomonly/newton
-      stencil: half/bin/2d/newton
+      stencil: half/bin/2d
       bin: standard
 Per MPI rank memory allocation (min/avg/max) = 3.304 | 3.304 | 3.304 Mbytes
 Step Temp E_pair E_mol TotEng Press Volume 
        0            1            0            0   0.71190476   0.52314537    571.54286 
-     500    1.0990751  -0.36396768            0   0.41846911     2.522517    575.55806 
-    1000            1  -0.34609791            0   0.36580685    1.9736175    584.67179 
-    1500    1.2112861  -0.39062708            0   0.47169327     1.521881    587.24778 
-    2000            1  -0.39956949            0   0.31233527    1.2496669    583.00676 
-    2500    1.2236323  -0.40128446            0   0.46982521    1.4276891    570.03729 
-    3000            1  -0.48849353            0   0.22341123    1.5091361    553.64637 
-    3500    1.2404547  -0.63017551            0   0.25291012     1.768107    535.22599 
-    4000            1  -0.71545964            0 -0.0035548789    2.2079822    516.73161 
-    4500    1.2270239  -0.78740977            0  0.086114399    2.6094706    503.17906 
-    5000            1   -0.8367971            0  -0.12489233     3.186175    498.73275 
-    5500    1.2257721  -0.77200456            0   0.10062844    2.6369599    502.75573 
-    6000            1   -0.6766551            0  0.035249665    2.2092944    512.08396 
-    6500    1.2201203  -0.67876788            0   0.18984154    1.8784541    517.92079 
-    7000            1  -0.68555696            0  0.026347797    1.8142356    516.44963 
-    7500    1.2482526   -0.7345934            0   0.15404357    2.0253109     511.4042 
-    8000            1  -0.70068231            0  0.011222455    2.1739831    504.55527 
-    8500    1.2151375  -0.77680457            0  0.088257564    2.6264947    498.00946 
-    9000            1  -0.74461165            0 -0.032706889     2.574656    498.14523 
-    9500    1.2047533  -0.75768848            0   0.09998113    2.4174997     501.8877 
-   10000            1  -0.67361996            0  0.038284798    2.2310948    507.57444 
-Loop time of 2.23407 on 1 procs for 10000 steps with 420 atoms
+     500    1.0644427  -0.31382888            0   0.44395296    3.0013076    571.54286 
+    1000            1  -0.42965445            0   0.28225032    2.9612165    571.54286 
+    1500    1.0739874  -0.41189772            0   0.35267901    2.5621951    571.54286 
+    2000            1  -0.40814263            0   0.30376214    2.9229587    571.54286 
+    2500    1.1929729  -0.38735055            0   0.46193257    2.8337691    571.54286 
+    3000            1  -0.44542386            0    0.2664809    2.7214531    571.54286 
+    3500    1.1553179  -0.42687142            0   0.39560493    2.5109633    571.54286 
+    4000            1  -0.40604742            0   0.30585734    2.7055928    571.54286 
+    4500    1.1498154  -0.44055268            0   0.37800642    2.5561154    571.54286 
+    5000            1  -0.41742254            0   0.29448222    2.4788457    571.54286 
+    5500     1.014604  -0.42503236            0   0.29726906     2.579664    571.54286 
+    6000            1  -0.41264837            0   0.29925639    2.5861705    571.54286 
+    6500    1.1443238   -0.4392768            0   0.37537274    2.2801246    571.54286 
+    7000            1  -0.38852754            0   0.32337722    2.3294037    571.54286 
+    7500    1.0568142  -0.42350098            0   0.32885011    2.3953589    571.54286 
+    8000            1     -0.39343            0   0.31847477    2.5701342    571.54286 
+    8500    1.0872157  -0.46282796            0    0.3111661    2.2892446    571.54286 
+    9000            1    -0.402333            0   0.30957177    2.4852035    571.54286 
+    9500   0.99889786  -0.46870263            0   0.24241751    2.3763314    571.54286 
+   10000            1  -0.43338695            0   0.27851782     2.405424    571.54286 
+Loop time of 1.19828 on 1 procs for 10000 steps with 420 atoms
 
-Performance: 1160216.843 tau/day, 4476.145 timesteps/s
-99.3% CPU use with 1 MPI tasks x 1 OpenMP threads
+Performance: 2163103.549 tau/day, 8345.307 timesteps/s
+99.4% CPU use with 1 MPI tasks x 1 OpenMP threads
 
 MPI task timing breakdown:
 Section |  min time  |  avg time  |  max time  |%varavg| %total
 ---------------------------------------------------------------
-Pair    | 0.080097   | 0.080097   | 0.080097   |   0.0 |  3.59
-Neigh   | 0.025335   | 0.025335   | 0.025335   |   0.0 |  1.13
-Comm    | 0.0056259  | 0.0056259  | 0.0056259  |   0.0 |  0.25
-Output  | 2.0245     | 2.0245     | 2.0245     |   0.0 | 90.62
-Modify  | 0.083498   | 0.083498   | 0.083498   |   0.0 |  3.74
-Other   |            | 0.01498    |            |       |  0.67
+Pair    | 0.077938   | 0.077938   | 0.077938   |   0.0 |  6.50
+Neigh   | 0.043434   | 0.043434   | 0.043434   |   0.0 |  3.62
+Comm    | 0.0056584  | 0.0056584  | 0.0056584  |   0.0 |  0.47
+Output  | 1.0148     | 1.0148     | 1.0148     |   0.0 | 84.69
+Modify  | 0.044272   | 0.044272   | 0.044272   |   0.0 |  3.69
+Other   |            | 0.01218    |            |       |  1.02
 
 Nlocal:        420.000 ave         420 max         420 min
 Histogram: 1 0 0 0 0 0 0 0 0 0
-Nghost:        48.0000 ave          48 max          48 min
+Nghost:        46.0000 ave          46 max          46 min
 Histogram: 1 0 0 0 0 0 0 0 0 0
-Neighs:        1124.00 ave        1124 max        1124 min
+Neighs:        952.000 ave         952 max         952 min
 Histogram: 1 0 0 0 0 0 0 0 0 0
 
-Total # of neighbors = 1124
-Ave neighs/atom = 2.6761905
-Neighbor list builds = 561
+Total # of neighbors = 952
+Ave neighs/atom = 2.2666667
+Neighbor list builds = 996
 Dangerous builds = 0
-Total wall time: 0:00:02
+Total wall time: 0:00:01
