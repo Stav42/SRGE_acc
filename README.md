@@ -45,17 +45,17 @@ To look at these results through various angle and zoom, open up .fig files in '
 
 ## Lammps 
 
-### Flow simulation
+### Flow simulations
 
 **Couette Flow**
 <p align="center">
-  <img src="https://raw.githubusercontent.com/Stav42/SRGE_acc/main/granular_ellipsoid/granular_ellipsoid_5000.jpg">
+  <img src="https://raw.githubusercontent.com/Stav42/SRGE_acc/main/lammps/flow/couette.gif">
 </p>
 
 
 **Poisson Flow**
 <p align="center">
-  <img src="https://raw.githubusercontent.com/Stav42/SRGE_acc/main/granular_ellipsoid/granular_ellipsoid_5000.jpg">
+  <img src="https://raw.githubusercontent.com/Stav42/SRGE_acc/main/lammps/flow/pois.gif">
 </p>
 
 
