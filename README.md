@@ -54,7 +54,6 @@ Download the gifs to look at the animations
   <img src="https://raw.githubusercontent.com/Stav42/SRGE_acc/main/lammps/flow/couette.gif">
 </p>
 
-
 **Poisson Flow**
 <p align="center">
   <img src="https://raw.githubusercontent.com/Stav42/SRGE_acc/main/lammps/flow/pois.gif">
