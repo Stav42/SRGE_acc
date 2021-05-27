@@ -47,6 +47,8 @@ To look at these results through various angle and zoom, open up .fig files in '
 
 ### Flow simulations
 
+Download the gifs to look at the animations
+
 **Couette Flow**
 <p align="center">
   <img src="https://raw.githubusercontent.com/Stav42/SRGE_acc/main/lammps/flow/couette.gif">
