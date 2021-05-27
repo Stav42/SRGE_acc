@@ -22,7 +22,9 @@ Parameters are:
  * Number of grains = 20000
  * Deviation of grains from mean_size = 10
 
-![20000 grains](https://raw.githubusercontent.com/Stav42/SRGE_acc/main/granular_ellipsoid/granular_ellipsoid_5000.jpg){:height="36px" width="36px"}
+<p align="center">
+  <img width="399" height="289" src="https://raw.githubusercontent.com/Stav42/SRGE_acc/main/granular_ellipsoid/granular_ellipsoid_20000.png">
+</p>
 
 Result for 5000 granular points:
 Paramters are:
@@ -32,8 +34,10 @@ Paramters are:
  * Number of grains = 5000
  * Deviation of grains from mean_size = 10
 
-![5000 grains](https://raw.githubusercontent.com/Stav42/SRGE_acc/main/granular_ellipsoid/granular_ellipsoid_5000.jpg){:height="36px" width="36px"}
+<p align="center">
+  <img width="326" height="294" src="https://raw.githubusercontent.com/Stav42/SRGE_acc/main/granular_ellipsoid/granular_ellipsoid_5000.jpg">
+</p>
 
-To look at these results through various angle and zoom, open up .fig files in 'granular_ellipsoid/'
+To look at these results through various angle and zoom, open up .fig files in 'granular_ellipsoid/' in MATLAB.
 
 
