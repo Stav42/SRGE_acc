@@ -20,19 +20,18 @@ hold on
 %fsurf(z2)
 
 %no of random points
-n_o_rp = 5000;
+n_o_rp = 2500;
 
 %picking random points
 x_rnd = -(a-xc) + 2*a*rand(1,n_o_rp);
 y_rnd = -(b-yc) + 2*b*rand(1,n_o_rp);
 z_rnd = -(c-zc) + 2*c*rand(1,n_o_rp);
 
-
-mean_size = 36;
-
-%acquire random size distribution for grains around mean 36. distribution
-%is +-10.
-rnd_size = mean_size + 2*5*rand(1,n_o_rp);
+%acquire random size distribution for grains around mean_radius. distribution
+%is +-10 pts squared. This is only for scatter3. Scatter3 doesn't plot size
+%of grains accurately. Its just a marker function.
+spread = 0.5*mean_radius;
+rnd_size = mean_radius + spread*rand(1,n_o_rp);
 
 %function defining the ellipsoid
 F1 = ((x_rnd-xc)/a).^2 + ((y_rnd-yc)/b).^2 + ((z_rnd-zc)/c).^2 - 1;
@@ -42,11 +41,24 @@ x_rnd = x_rnd(ind);  x_rnd = x_rnd(:);
 y_rnd = y_rnd(ind);  y_rnd = y_rnd(:);      
 z_rnd = z_rnd(ind);  z_rnd = z_rnd(:);
 
+pts_rnd = [[x_rnd],[y_rnd],[z_rnd]];
+
 %number of points inside the ellipsoid
 rnd_x_shape = size(x_rnd);
+
+%radii through growbubbles.m function:
+rads = growbubbles(pts_rnd);
+
+pts_rnd_size = [[pts_rnd],[rads.']];
 
 %choose sizes for all the grains from the normal distribution attained
 %earlier
 rnd_size = rnd_size(1:rnd_x_shape(1));
+
+%[xs ys zs] = sphere;
+a%s1=surf(xs*pts_rnd_size(:,4)+pts_rnd_size(:,1), ys*pts_rnd_size(:,4)+pts_rnd_size(:,2), zs*pts_rnd_size(:,4)+pts_rnd_size(:,3));
+
+%daspect([1 1 1])
+%view(30,10)
 
 scatter3(x_rnd, y_rnd, z_rnd, rnd_size,  'MarkerFaceColor','b','MarkerEdgeColor','b')
