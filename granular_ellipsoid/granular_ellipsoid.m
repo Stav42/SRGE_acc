@@ -20,7 +20,7 @@ hold on
 %fsurf(z2)
 
 %no of random points
-n_o_rp = 20000;
+n_o_rp = 2500;
 
 %picking random points
 x_rnd = -(a-xc) + 2*a*rand(1,n_o_rp);
