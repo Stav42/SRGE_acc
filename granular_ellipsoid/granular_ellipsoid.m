@@ -20,7 +20,7 @@ hold on
 %fsurf(z2)
 
 %no of random points
-n_o_rp = 20000;
+n_o_rp = 2000;
 
 %picking random points
 x_rnd = -(a-xc) + 2*a*rand(1,n_o_rp);
@@ -36,7 +36,7 @@ rnd_size = mean_size + spread*rand(1,n_o_rp);
 
 %function defining the ellipsoid
 F1 = ((x_rnd-xc)/a).^2 + ((y_rnd-yc)/b).^2 + ((z_rnd-zc)/c).^2 - 1;
-
+F2 = ((x_rnd-xc)).^2 + ((y_rnd-yc)).^2 + ((z_rnd-zc)).^2 - 0.25;
 ind = F1<0; %indices for points inside the the surface
 x_rnd = x_rnd(ind);  x_rnd = x_rnd(:);    
 y_rnd = y_rnd(ind);  y_rnd = y_rnd(:);      
