@@ -52,9 +52,6 @@ Download the gifs to look at the animations
 
 ![alt text](https://raw.githubusercontent.com/Stav42/SRGE_acc/main/lammps/flow/couette.gif "Couette Flow")
 
-**Poisson Flow**
-
-![alt text](https://im6.ezgif.com/tmp/ezgif-6-5e935146b645.gif "Poisson Flow")
 
 
 
