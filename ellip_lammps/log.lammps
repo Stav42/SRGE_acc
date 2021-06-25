@@ -1,104 +1,109 @@
 LAMMPS (27 May 2021)
-OMP_NUM_THREADS environment is not set. Defaulting to 1 thread. (src/comm.cpp:98)
-  using 1 OpenMP thread(s) per MPI task
 #--INITIALIZATION--
+
 units si
 atom_style hybrid charge sphere
-WARNING: Atom style hybrid defines both, per-type and per-atom masses; both must be set, but only per-atom masses will be used (src/atom_vec_hybrid.cpp:157)
-read_data data.grain_charged
+WARNING: Atom style hybrid defines both, per-type and per-atom masses; both must be set, but only per-atom masses will be used (../atom_vec_hybrid.cpp:157)
+read_data data.charge_si
 Reading data file ...
-  orthogonal box = (5.0000000 15.000000 0.0000000) to (25.000000 32.532225 20.000000)
-  1 by 1 by 1 MPI processor grid
+  orthogonal box = (-1.0000000 -1.0000000 -1.0000000) to (1.0000000 1.0000000 1.0000000)
+  2 by 2 by 2 MPI processor grid
   reading atoms ...
-  10448 atoms
-  read_data CPU = 0.016 seconds
+  8331 atoms
+  read_data CPU = 0.013 seconds
 
+#atom-ID atom-type x y z q diameter density
 
 comm_modify vel yes
 
 dielectric -1.0
 
-#perform constant NVE integration to update velocity and position.
-#pair_style coul/cut 1
-#pair_coeff * *
-#pair_style gran/hooke 200000 NULL 1.0 1.0 0.5 0
-#pair_coeff * *
-pair_style hybrid/overlay coul/cut 1 gran/hooke 0.0001 0 0 0 0.0004 1 limit_damping
+pair_style hybrid/overlay coul/cut 1 gran/hertz/history 7259259259.25926 9074074074.07408 720531329.04996 360265664.52498 0.7 0
+
 pair_coeff * * coul/cut
-pair_coeff * * gran/hooke
+pair_coeff * * gran/hertz/history
 
 fix 1 all nve/sphere
+thermo      1800
+neigh_modify 	page 100000 one 10000 binsize 0.0
+#neighbor        ${skin} bin
 
-dump myDump all custom 100 dump.grain_charge xs ys zs radius vx vy vz
+dump myDump all custom 100 dump.grain_si xs ys zs radius vx vy vz
 
-timestep 10
+timestep 0.000000831768043574252
 
-thermo      100
-run		2000
+
+thermo_style	multi
+thermo_modify   flush yes lost warn
+
+run		6000
 Neighbor list info ...
   update every 1 steps, delay 10 steps, check yes
-  max neighbors/atom: 2000, page size: 100000
+  max neighbors/atom: 10000, page size: 100000
   master list distance cutoff = 1.001
   ghost atom cutoff = 1.001
-  binsize = 0.5005, bins = 40 36 40
+  binsize = 0.5005, bins = 4 4 4
   2 neighbor lists, perpetual/occasional/extra = 2 0 0
   (1) pair coul/cut, perpetual
       attributes: half, newton on
       pair build: half/bin/atomonly/newton
       stencil: half/bin/3d
       bin: standard
-  (2) pair gran/hooke, perpetual
-      attributes: half, newton on, size
+  (2) pair gran/hertz/history, perpetual
+      attributes: half, newton on, size, history
       pair build: half/size/bin/newton
       stencil: half/bin/3d
       bin: standard
-Per MPI rank memory allocation (min/avg/max) = 8.030 | 8.030 | 8.030 Mbytes
-Step Temp E_pair E_mol TotEng Press 
-       0            0 -0.0065666164            0 -0.0065666164 -3.1211963e-07 
-     100 1.6564194e+14 -0.006625658            0 -0.0065898205 -2.8529671e-07 
-     200 6.0824861e+14 -0.0067966025            0 -0.006665005 -2.5917496e-07 
-     300 1.279443e+15 -0.0070973919            0 -0.0068205783 -2.1790325e-07 
-     400 2.0826754e+15 -0.0075400645            0 -0.0070894676 -1.6638584e-07 
-     500 2.9598628e+15 -0.0080976027            0 -0.0074572221 -1.1797291e-07 
-     600 3.8217067e+15 -0.0086872957            0 -0.007860451 -8.4242736e-08 
-     700 4.6556591e+15 -0.009283888            0 -0.0082766137 -6.2401068e-08 
-     800 5.429868e+15 -0.0098643497            0 -0.0086895716 -5.1927292e-08 
-     900 6.2120442e+15 -0.010399613            0 -0.0090556073 -4.6812686e-08 
-    1000 6.9303235e+15 -0.010920211            0 -0.0094208018 -3.8058915e-08 
-    1100  7.59326e+15 -0.011433978            0 -0.0097911392 -2.202617e-08 
-    1200 8.3079569e+15 -0.011978091            0 -0.010180625 -7.6094014e-09 
-    1300 9.0722271e+15 -0.012523309            0 -0.010560488 1.0297811e-08 
-    1400 9.6790315e+15 -0.013020557            0 -0.010926452 3.0508528e-08 
-    1500 1.0307325e+16 -0.013504914            0 -0.011274874 4.3485374e-08 
-    1600 1.0980432e+16 -0.013900944            0 -0.011525274 5.8324939e-08 
-    1700 1.1600344e+16 -0.014307389            0 -0.011797598 7.5346409e-08 
-    1800 1.2165975e+16 -0.014653402            0 -0.012021235 8.1959546e-08 
-    1900 1.2954412e+16 -0.014972376            0 -0.012169626 8.8382963e-08 
-    2000 1.3578195e+16 -0.015285484            0 -0.012347777 1.0620654e-07 
-Loop time of 12.6591 on 1 procs for 2000 steps with 10448 atoms
+Per MPI rank memory allocation (min/avg/max) = 28.90 | 37.82 | 46.84 Mbytes
+---------------- Step        0 ----- CPU =      0.0000 (sec) ----------------
+TotEng   =        -0.0000 KinEng   =         0.0000 Temp     =         0.0000 
+PotEng   =        -0.0000 E_bond   =         0.0000 E_angle  =         0.0000 
+E_dihed  =         0.0000 E_impro  =         0.0000 E_vdwl   =         0.0000 
+E_coul   =        -0.0000 E_long   =         0.0000 Press    =         0.4293 
+---------------- Step     1800 ----- CPU =    152.3820 (sec) ----------------
+TotEng   =       261.6002 KinEng   =       261.6002 Temp     = 1516415008111692873728.0000 
+PotEng   =        -0.0000 E_bond   =         0.0000 E_angle  =         0.0000 
+E_dihed  =         0.0000 E_impro  =         0.0000 E_vdwl   =         0.0000 
+E_coul   =        -0.0000 E_long   =         0.0000 Press    =        21.8121 
+---------------- Step     3600 ----- CPU =    311.4662 (sec) ----------------
+TotEng   =       403.4422 KinEng   =       403.4422 Temp     = 2338628771677063086080.0000 
+PotEng   =        -0.0000 E_bond   =         0.0000 E_angle  =         0.0000 
+E_dihed  =         0.0000 E_impro  =         0.0000 E_vdwl   =         0.0000 
+E_coul   =        -0.0000 E_long   =         0.0000 Press    =        33.6233 
+---------------- Step     5400 ----- CPU =    473.2828 (sec) ----------------
+TotEng   =       404.4405 KinEng   =       404.4405 Temp     = 2344415723258041073664.0000 
+PotEng   =        -0.0000 E_bond   =         0.0000 E_angle  =         0.0000 
+E_dihed  =         0.0000 E_impro  =         0.0000 E_vdwl   =         0.0000 
+E_coul   =        -0.0000 E_long   =         0.0000 Press    =        33.7045 
+---------------- Step     6000 ----- CPU =    527.6832 (sec) ----------------
+TotEng   =       404.4345 KinEng   =       404.4345 Temp     = 2344381307641739608064.0000 
+PotEng   =        -0.0000 E_bond   =         0.0000 E_angle  =         0.0000 
+E_dihed  =         0.0000 E_impro  =         0.0000 E_vdwl   =         0.0000 
+E_coul   =        -0.0000 E_long   =         0.0000 Press    =        33.7068 
+Loop time of 527.683 on 8 procs for 6000 steps with 8331 atoms
 
-99.9% CPU use with 1 MPI tasks x 1 OpenMP threads
+99.0% CPU use with 8 MPI tasks x no OpenMP threads
 
 MPI task timing breakdown:
 Section |  min time  |  avg time  |  max time  |%varavg| %total
 ---------------------------------------------------------------
-Pair    | 7.9887     | 7.9887     | 7.9887     |   0.0 | 63.11
-Neigh   | 3.9689     | 3.9689     | 3.9689     |   0.0 | 31.35
-Comm    | 0.028937   | 0.028937   | 0.028937   |   0.0 |  0.23
-Output  | 0.32682    | 0.32682    | 0.32682    |   0.0 |  2.58
-Modify  | 0.29221    | 0.29221    | 0.29221    |   0.0 |  2.31
-Other   |            | 0.05362    |            |       |  0.42
+Pair    | 141.64     | 286.67     | 433.76     | 839.9 | 54.33
+Neigh   | 40.68      | 43.848     | 46.699     |  38.9 |  8.31
+Comm    | 42.232     | 192.02     | 340.39     |1044.1 | 36.39
+Output  | 0.12632    | 0.13676    | 0.14767    |   1.8 |  0.03
+Modify  | 0.95138    | 0.96935    | 0.98265    |   1.1 |  0.18
+Other   |            | 4.03       |            |       |  0.76
 
-Nlocal:        10448.0 ave       10448 max       10448 min
-Histogram: 1 0 0 0 0 0 0 0 0 0
-Nghost:        195.000 ave         195 max         195 min
-Histogram: 1 0 0 0 0 0 0 0 0 0
-Neighs:        336332.0 ave      336332 max      336332 min
-Histogram: 1 0 0 0 0 0 0 0 0 0
+Nlocal:        1041.38 ave        1113 max         998 min
+Histogram: 1 1 2 0 3 0 0 0 0 1
+Nghost:        27816.0 ave       28279 max       27484 min
+Histogram: 1 0 1 3 0 2 0 0 0 1
+Neighs:    4.32696e+06 ave 6.59515e+06 max 2.16113e+06 min
+Histogram: 4 0 0 0 0 0 0 0 0 4
 
-Total # of neighbors = 336332
-Ave neighs/atom = 32.191041
-Neighbor list builds = 199
-Dangerous builds = 198
+Total # of neighbors = 34615664
+Ave neighs/atom = 4155.0431
+Neighbor list builds = 600
+Dangerous builds = 600
 
-Total wall time: 0:00:12
+Total wall time: 0:08:47

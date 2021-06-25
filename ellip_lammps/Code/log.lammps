@@ -1,0 +1,272 @@
+LAMMPS (27 May 2021)
+ # ellipsoidal collapse of particles
+
+#thermo_modify	flush yes
+units 		si
+variable	name string ellipsoid
+variable	seed equal 14314
+variable	PI equal 3.141592653589
+
+#give values below###########################################
+
+variable	dumpfreq equal 1800
+variable	logfreq equal 1800
+
+###############################################
+# Particle parameters
+################################################
+
+variable	rlo equal 3.84
+variable	rhi equal 5.76
+variable	dlo equal 2.0*${rlo}
+variable	dlo equal 2.0*3.84
+variable	dhi equal 2.0*${rhi}
+variable	dhi equal 2.0*5.76
+variable 	skin equal ${rhi}
+variable 	skin equal 5.76
+
+variable	coeffRes equal 0.5
+variable	coeffFric equal 0.7
+
+variable	gravconstant equal 6.67e-11
+variable	density equal 3600
+
+variable	EYoung equal 10^10
+#variable        EYoung equal 100*10^9
+variable 	Poisson equal 2.0/7.0
+variable	GShear equal ${EYoung}/(2*(1+${Poisson}))
+variable	GShear equal 10000000000/(2*(1+${Poisson}))
+variable	GShear equal 10000000000/(2*(1+0.285714285714286))
+
+variable	reff equal 0.5*(${rhi}+${rlo})
+variable	reff equal 0.5*(5.76+${rlo})
+variable	reff equal 0.5*(5.76+3.84)
+variable	meff equal ${density}*4.0/3.0*${PI}*${reff}^3
+variable	meff equal 3600*4.0/3.0*${PI}*${reff}^3
+variable	meff equal 3600*4.0/3.0*3.141592653589*${reff}^3
+variable	meff equal 3600*4.0/3.0*3.141592653589*4.8^3
+variable	min_mass equal ${density}*4.0/3.0*${PI}*${rlo}*${rlo}*${rlo}
+variable	min_mass equal 3600*4.0/3.0*${PI}*${rlo}*${rlo}*${rlo}
+variable	min_mass equal 3600*4.0/3.0*3.141592653589*${rlo}*${rlo}*${rlo}
+variable	min_mass equal 3600*4.0/3.0*3.141592653589*3.84*${rlo}*${rlo}
+variable	min_mass equal 3600*4.0/3.0*3.141592653589*3.84*3.84*${rlo}
+variable	min_mass equal 3600*4.0/3.0*3.141592653589*3.84*3.84*3.84
+variable	max_mass equal ${density}*4.0/3.0*${PI}*${rhi}*${rhi}*${rhi}
+variable	max_mass equal 3600*4.0/3.0*${PI}*${rhi}*${rhi}*${rhi}
+variable	max_mass equal 3600*4.0/3.0*3.141592653589*${rhi}*${rhi}*${rhi}
+variable	max_mass equal 3600*4.0/3.0*3.141592653589*5.76*${rhi}*${rhi}
+variable	max_mass equal 3600*4.0/3.0*3.141592653589*5.76*5.76*${rhi}
+variable	max_mass equal 3600*4.0/3.0*3.141592653589*5.76*5.76*5.76
+
+## Typical way to set kn, kt, etc.:
+variable        kn equal 4.0*${GShear}/(3*(1-${Poisson}))
+variable        kn equal 4.0*3888888888.88889/(3*(1-${Poisson}))
+variable        kn equal 4.0*3888888888.88889/(3*(1-0.285714285714286))
+variable        kt equal 4.0*${GShear}/(2-${Poisson})
+variable        kt equal 4.0*3888888888.88889/(2-${Poisson})
+variable        kt equal 4.0*3888888888.88889/(2-0.285714285714286)
+
+#variable	kn equal 10^9
+#variable 	kt equal 0.2*${kn}
+
+variable	a equal (-2.0*log(${coeffRes})/${PI})^2
+variable	a equal (-2.0*log(0.5)/${PI})^2
+variable	a equal (-2.0*log(0.5)/3.141592653589)^2
+variable        gamma_n equal sqrt($a*2*${kn}/${min_mass}/(1+0.25*$a))
+variable        gamma_n equal sqrt(0.0367265209857855*2*${kn}/${min_mass}/(1+0.25*$a))
+variable        gamma_n equal sqrt(0.0367265209857855*2*7259259259.25926/${min_mass}/(1+0.25*$a))
+variable        gamma_n equal sqrt(0.0367265209857855*2*7259259259.25926/853856.292239068/(1+0.25*$a))
+variable        gamma_n equal sqrt(0.0367265209857855*2*7259259259.25926/853856.292239068/(1+0.25*0.0367265209857855))
+variable        gamma_t equal ${gamma_n}*0.5
+variable        gamma_t equal 24.875624177984*0.5
+
+variable	tcol equal ${PI}/sqrt(2*${kn}/${min_mass}-${gamma_n}/4.0)
+variable	tcol equal 3.141592653589/sqrt(2*${kn}/${min_mass}-${gamma_n}/4.0)
+variable	tcol equal 3.141592653589/sqrt(2*7259259259.25926/${min_mass}-${gamma_n}/4.0)
+variable	tcol equal 3.141592653589/sqrt(2*7259259259.25926/853856.292239068-${gamma_n}/4.0)
+variable	tcol equal 3.141592653589/sqrt(2*7259259259.25926/853856.292239068-24.875624177984/4.0)
+
+variable	dt equal ${tcol}*1.0
+variable	dt equal 0.0240968651645923*1.0
+#variable       dt equal ${tcol}*0.02
+
+#variable        dt equal 0.18
+#variable 	dt equal 1
+timestep	${dt}
+timestep	0.0240968651645923
+
+###############################################
+
+
+newton 		on
+atom_style	hybrid charge sphere
+WARNING: Atom style hybrid defines both, per-type and per-atom masses; both must be set, but only per-atom masses will be used (../atom_vec_hybrid.cpp:157)
+
+boundary	f f f
+
+########give value for region#############################
+#region		sphreg sphere 0 0 0 30
+#create_box	1 sphreg
+
+read_data       ellipse.txt
+Reading data file ...
+  orthogonal box = (-1000.0000 -1000.0000 -1000.0000) to (1000.0000 1000.0000 1000.0000)
+  2 by 2 by 2 MPI processor grid
+  reading atoms ...
+  6100 atoms
+  reading velocities ...
+  6100 velocities
+  read_data CPU = 0.018 seconds
+#set		type all charge 1.622710e-07
+#set		type all charge 1.62e-07
+
+pair_style	hybrid/overlay gran/hertz/history ${kn} ${kt} ${gamma_n} ${gamma_t} ${coeffFric} 0 coul/cut 5000
+pair_style	hybrid/overlay gran/hertz/history 7259259259.25926 ${kt} ${gamma_n} ${gamma_t} ${coeffFric} 0 coul/cut 5000
+pair_style	hybrid/overlay gran/hertz/history 7259259259.25926 9074074074.07408 ${gamma_n} ${gamma_t} ${coeffFric} 0 coul/cut 5000
+pair_style	hybrid/overlay gran/hertz/history 7259259259.25926 9074074074.07408 24.875624177984 ${gamma_t} ${coeffFric} 0 coul/cut 5000
+pair_style	hybrid/overlay gran/hertz/history 7259259259.25926 9074074074.07408 24.875624177984 12.437812088992 ${coeffFric} 0 coul/cut 5000
+pair_style	hybrid/overlay gran/hertz/history 7259259259.25926 9074074074.07408 24.875624177984 12.437812088992 0.7 0 coul/cut 5000
+pair_coeff	* * gran/hertz/history
+pair_coeff	* * coul/cut
+
+dielectric	-1
+
+neigh_modify 	page 100000000 one 1000000 binsize 0.0
+neighbor        ${skin} bin
+neighbor        5.76 bin
+
+#neighbour 	0.5 bin
+thermo 		${logfreq}
+thermo 		1800
+
+comm_style	brick
+comm_modify  group all vel yes
+
+fix		bal all balance 300000 1.1 shift xyz 20 1.01
+
+####################### Options specific to ellipse #########################
+
+
+
+fix             1 all nve/sphere
+#read_data       initialposition.txt add append
+#set		type all charge 1.622710e-07
+#
+dump            1 all custom ${dumpfreq} ${name}_*.dump                 id type diameter x y z vx vy vz fx fy fz
+dump            1 all custom 1800 ${name}_*.dump                 id type diameter x y z vx vy vz fx fy fz
+dump            1 all custom 1800 ellipsoid_*.dump                 id type diameter x y z vx vy vz fx fy fz
+
+
+thermo_style	multi
+thermo_modify   flush yes lost warn
+run 		18000
+Neighbor list info ...
+  update every 1 steps, delay 10 steps, check yes
+  max neighbors/atom: 1000000, page size: 100000000
+  master list distance cutoff = 5005.76
+  ghost atom cutoff = 5005.76
+  binsize = 2502.88, bins = 1 1 1
+  2 neighbor lists, perpetual/occasional/extra = 2 0 0
+  (1) pair gran/hertz/history, perpetual
+      attributes: half, newton on, size, history
+      pair build: half/size/bin/newton
+      stencil: half/bin/3d
+      bin: standard
+  (2) pair coul/cut, perpetual
+      attributes: half, newton on
+      pair build: half/bin/atomonly/newton
+      stencil: half/bin/3d
+      bin: standard
+Per MPI rank memory allocation (min/avg/max) = 6111.0 | 6111.0 | 6111.0 Mbytes
+---------------- Step        0 ----- CPU =      0.0000 (sec) ----------------
+TotEng   = -22335647.4063 KinEng   =         0.0000 Temp     =         0.0000 
+PotEng   = -22335647.4063 E_bond   =         0.0000 E_angle  =         0.0000 
+E_dihed  =         0.0000 E_impro  =         0.0000 E_vdwl   =         0.0000 
+E_coul   = -22335647.4063 E_long   =         0.0000 Press    =        -0.0009 
+Volume   = 8000000000.0000 
+---------------- Step     1800 ----- CPU =     68.7703 (sec) ----------------
+TotEng   = -22335647.4063 KinEng   =      2162.4486 Temp     = 17120331631966543675392.0000 
+PotEng   = -22337809.8549 E_bond   =         0.0000 E_angle  =         0.0000 
+E_dihed  =         0.0000 E_impro  =         0.0000 E_vdwl   =         0.0000 
+E_coul   = -22337809.8549 E_long   =         0.0000 Press    =        -0.0009 
+Volume   = 8000000000.0000 
+---------------- Step     3600 ----- CPU =    143.2901 (sec) ----------------
+TotEng   = -22335647.4063 KinEng   =      8653.1573 Temp     = 68507951456001921646592.0000 
+PotEng   = -22344300.5636 E_bond   =         0.0000 E_angle  =         0.0000 
+E_dihed  =         0.0000 E_impro  =         0.0000 E_vdwl   =         0.0000 
+E_coul   = -22344300.5636 E_long   =         0.0000 Press    =        -0.0009 
+Volume   = 8000000000.0000 
+---------------- Step     5400 ----- CPU =    222.5189 (sec) ----------------
+TotEng   = -22335647.4063 KinEng   =     19482.2291 Temp     = 154242846159173824020480.0000 
+PotEng   = -22355129.6354 E_bond   =         0.0000 E_angle  =         0.0000 
+E_dihed  =         0.0000 E_impro  =         0.0000 E_vdwl   =         0.0000 
+E_coul   = -22355129.6354 E_long   =         0.0000 Press    =        -0.0009 
+Volume   = 8000000000.0000 
+---------------- Step     7200 ----- CPU =    302.7728 (sec) ----------------
+TotEng   = -22335647.4063 KinEng   =     34666.5497 Temp     = 274458700810791797391360.0000 
+PotEng   = -22370313.9560 E_bond   =         0.0000 E_angle  =         0.0000 
+E_dihed  =         0.0000 E_impro  =         0.0000 E_vdwl   =         0.0000 
+E_coul   = -22370313.9560 E_long   =         0.0000 Press    =        -0.0009 
+Volume   = 8000000000.0000 
+---------------- Step     9000 ----- CPU =    383.3484 (sec) ----------------
+TotEng   = -22335647.4063 KinEng   =     54229.8584 Temp     = 429343462964786098077696.0000 
+PotEng   = -22389877.2647 E_bond   =         0.0000 E_angle  =         0.0000 
+E_dihed  =         0.0000 E_impro  =         0.0000 E_vdwl   =         0.0000 
+E_coul   = -22389877.2647 E_long   =         0.0000 Press    =        -0.0009 
+Volume   = 8000000000.0000 
+---------------- Step    10800 ----- CPU =    466.0575 (sec) ----------------
+TotEng   = -22335647.4063 KinEng   =     78202.8491 Temp     = 619140138880230418808832.0000 
+PotEng   = -22413850.2554 E_bond   =         0.0000 E_angle  =         0.0000 
+E_dihed  =         0.0000 E_impro  =         0.0000 E_vdwl   =         0.0000 
+E_coul   = -22413850.2554 E_long   =         0.0000 Press    =        -0.0009 
+Volume   = 8000000000.0000 
+---------------- Step    12600 ----- CPU =    547.5695 (sec) ----------------
+TotEng   = -22335647.4063 KinEng   =    106623.3008 Temp     = 844147828443196065579008.0000 
+PotEng   = -22442270.7071 E_bond   =         0.0000 E_angle  =         0.0000 
+E_dihed  =         0.0000 E_impro  =         0.0000 E_vdwl   =         0.0000 
+E_coul   = -22442270.7071 E_long   =         0.0000 Press    =        -0.0009 
+Volume   = 8000000000.0000 
+---------------- Step    14400 ----- CPU =    629.2688 (sec) ----------------
+TotEng   = -22335647.4063 KinEng   =    139536.2394 Temp     = 1104723007407945609641984.0000 
+PotEng   = -22475183.6458 E_bond   =         0.0000 E_angle  =         0.0000 
+E_dihed  =         0.0000 E_impro  =         0.0000 E_vdwl   =         0.0000 
+E_coul   = -22475183.6458 E_long   =         0.0000 Press    =        -0.0009 
+Volume   = 8000000000.0000 
+---------------- Step    16200 ----- CPU =    712.4061 (sec) ----------------
+TotEng   = -22335647.4063 KinEng   =    176994.1327 Temp     = 1401281067730103800168448.0000 
+PotEng   = -22512641.5390 E_bond   =         0.0000 E_angle  =         0.0000 
+E_dihed  =         0.0000 E_impro  =         0.0000 E_vdwl   =         0.0000 
+E_coul   = -22512641.5390 E_long   =         0.0000 Press    =        -0.0009 
+Volume   = 8000000000.0000 
+---------------- Step    18000 ----- CPU =    794.4538 (sec) ----------------
+TotEng   = -22335647.4063 KinEng   =    219057.1187 Temp     = 1734298129070589898391552.0000 
+PotEng   = -22554704.5250 E_bond   =         0.0000 E_angle  =         0.0000 
+E_dihed  =         0.0000 E_impro  =         0.0000 E_vdwl   =         0.0000 
+E_coul   = -22554704.5250 E_long   =         0.0000 Press    =        -0.0009 
+Volume   = 8000000000.0000 
+Loop time of 794.454 on 8 procs for 18000 steps with 6100 atoms
+
+99.7% CPU use with 8 MPI tasks x no OpenMP threads
+
+MPI task timing breakdown:
+Section |  min time  |  avg time  |  max time  |%varavg| %total
+---------------------------------------------------------------
+Pair    | 240.63     | 494.64     | 757.55     |1103.4 | 62.26
+Neigh   | 0          | 0          | 0          |   0.0 |  0.00
+Comm    | 34.285     | 297.36     | 551.64     |1424.7 | 37.43
+Output  | 0.040029   | 0.040641   | 0.041671   |   0.3 |  0.01
+Modify  | 0.58014    | 0.71347    | 0.84269    |   9.6 |  0.09
+Other   |            | 1.697      |            |       |  0.21
+
+Nlocal:        762.500 ave         783 max         740 min
+Histogram: 2 0 0 2 0 0 1 0 1 2
+Nghost:        5337.50 ave        5360 max        5317 min
+Histogram: 2 1 0 1 0 0 2 0 0 2
+Neighs:        882.750 ave         949 max         810 min
+Histogram: 1 0 1 0 1 2 0 2 0 1
+
+Total # of neighbors = 7062
+Ave neighs/atom = 1.1577049
+Neighbor list builds = 0
+Dangerous builds = 0
+Total wall time: 0:13:14

@@ -1,28 +1,32 @@
 #--INITIALIZATION--
+
 units si 
 atom_style hybrid charge sphere 
-read_data data.grain_charged
+read_data data.charge_si
 
+#atom-ID atom-type x y z q diameter density
 
 comm_modify vel yes
 
 dielectric -1.0
 
-#perform constant NVE integration to update velocity and position. 
-#pair_style coul/cut 1
-#pair_coeff * *
-#pair_style gran/hooke 200000 NULL 1.0 1.0 0.5 0 
-#pair_coeff * *
-pair_style hybrid/overlay coul/cut 1 gran/hooke 0.0001 0 0 0 0.0004 1 limit_damping
+pair_style hybrid/overlay coul/cut 1 gran/hertz/history 7259259259.25926 9074074074.07408 720531329.04996 360265664.52498 0.7 0
+
 pair_coeff * * coul/cut 
-pair_coeff * * gran/hooke
+pair_coeff * * gran/hertz/history
 
 fix 1 all nve/sphere
+thermo      1800
+neigh_modify 	page 100000 one 10000 binsize 0.0
+#neighbor        ${skin} bin
 
-dump myDump all custom 100 dump.grain_charge xs ys zs radius vx vy vz
+dump myDump all custom 100 dump.grain_si xs ys zs radius vx vy vz
 
-timestep 10
+timestep 0.000000831768043574252
 
-thermo      100
-run		2000
+
+thermo_style	multi
+thermo_modify   flush yes lost warn
+
+run		3000
 

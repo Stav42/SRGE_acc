@@ -2,12 +2,12 @@
 syms x y z;
 
 %assign values
-a = 8;
-b = 4;
-c = 6;
-xc = 15;
-yc = 20;
-zc = 10;
+a = 0.08;
+b = 0.04;
+c = 0.06;
+xc = 0;
+yc = 0;
+zc = 0;
 
 
 %plot 3d surface of ellipsoid
@@ -20,7 +20,7 @@ hold on
 %fsurf(z2)
 
 %no of random points
-n_o_rp = 2000;
+n_o_rp = 16000;
 
 %picking random points
 x_rnd = -(a-xc) + 2*a*rand(1,n_o_rp);
@@ -36,7 +36,7 @@ rnd_size = mean_size + spread*rand(1,n_o_rp);
 
 %function defining the ellipsoid
 F1 = ((x_rnd-xc)/a).^2 + ((y_rnd-yc)/b).^2 + ((z_rnd-zc)/c).^2 - 1;
-F2 = ((x_rnd-xc)).^2 + ((y_rnd-yc)).^2 + ((z_rnd-zc)).^2 - 0.25;
+
 ind = F1<0; %indices for points inside the the surface
 x_rnd = x_rnd(ind);  x_rnd = x_rnd(:);    
 y_rnd = y_rnd(ind);  y_rnd = y_rnd(:);      
@@ -57,7 +57,7 @@ pts_rnd_size = [[pts_rnd],[rads.']];
 rnd_size = rnd_size(1:rnd_x_shape(1));
 
 %[xs ys zs] = sphere;
-a%s1=surf(xs*pts_rnd_size(:,4)+pts_rnd_size(:,1), ys*pts_rnd_size(:,4)+pts_rnd_size(:,2), zs*pts_rnd_size(:,4)+pts_rnd_size(:,3));
+%s1=surf(xs*pts_rnd_size(:,4)+pts_rnd_size(:,1), ys*pts_rnd_size(:,4)+pts_rnd_size(:,2), zs*pts_rnd_size(:,4)+pts_rnd_size(:,3));
 
 %daspect([1 1 1])
 %view(30,10)
